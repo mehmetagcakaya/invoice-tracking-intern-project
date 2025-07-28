@@ -1,0 +1,258 @@
+@model BillManagerApp.Models.Bill
+@{
+    ViewData["Title"] = "Fatura Sil";
+}
+
+@section Styles {
+    <style>
+        .modern-delete-container {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        .delete-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .floating-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .warning-card {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #f39c12;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(243, 156, 18, 0.2);
+        }
+        .details-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .btn-modern {
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .btn-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .btn-danger-modern {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+        .btn-secondary-modern {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #495057;
+        }
+        .detail-item {
+            background: rgba(255,255,255,0.7);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        .detail-item:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-2px);
+        }
+        .pulse-warning {
+            animation: pulse 2s infinite;
+        }
+        @@keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+}
+
+<div class="modern-delete-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Floating Header -->
+                <div class="floating-header text-center">
+                    <h1 class="display-6 fw-bold text-danger mb-2">
+                        <i class="fas fa-trash-alt me-3 pulse-warning"></i>
+                        Fatura Silme Onayı
+                    </h1>
+                    <p class="lead text-muted mb-0">Bu işlem geri alınamaz - dikkatli olun!</p>
+                </div>
+
+                <!-- Warning Card -->
+                <div class="warning-card p-4 mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            <i class="fas fa-exclamation-triangle fa-3x text-warning pulse-warning"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <h5 class="fw-bold text-dark mb-2">
+                                <i class="fas fa-shield-alt me-2"></i>
+                                Güvenlik Uyarısı
+                            </h5>
+                            <p class="mb-2 text-dark">
+                                <strong>"@Model.Name"</strong> faturasını silmek üzeresiniz. Bu işlem:
+                            </p>
+                            <ul class="mb-0 text-dark">
+                                <li>Geri alınamaz</li>
+                                <li>Tüm fatura verilerini kalıcı olarak siler</li>
+                                <li>İstatistiklerinizi etkileyebilir</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bill Details Card -->
+                <div class="delete-card p-5">
+                    <div class="text-center mb-4">
+                        <h4 class="fw-bold text-dark">
+                            <i class="fas fa-file-invoice me-2 text-primary"></i>
+                            Silinecek Fatura Detayları
+                        </h4>
+                    </div>
+
+                    <div class="row g-3">
+                        <!-- Fatura Adı -->
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <label class="fw-bold text-muted small">FATURA ADI</label>
+                                <h6 class="text-dark mb-0 mt-1">@Model.Name</h6>
+                            </div>
+                        </div>
+
+                        <!-- Kategori -->
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <label class="fw-bold text-muted small">KATEGORİ</label>
+                                <h6 class="text-dark mb-0 mt-1">
+                                    <span class="badge bg-secondary">@Model.Category</span>
+                                </h6>
+                            </div>
+                        </div>
+
+                        <!-- Tutar -->
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <label class="fw-bold text-muted small">TUTAR</label>
+                                <h5 class="text-primary fw-bold mb-0 mt-1">@Model.Amount.ToString("C2")</h5>
+                            </div>
+                        </div>
+
+                        <!-- Son Ödeme Tarihi -->
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <label class="fw-bold text-muted small">SON ÖDEME TARİHİ</label>
+                                <h6 class="text-dark mb-0 mt-1">@Model.DueDate.ToString("dd/MM/yyyy")</h6>
+                            </div>
+                        </div>
+
+                        <!-- Durum -->
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <label class="fw-bold text-muted small">DURUM</label>
+                                <div class="mt-1">
+                                    @if (Model.IsPaid)
+                                    {
+                                        <span class="badge bg-success fs-6">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Ödenmiş
+                                        </span>
+                                        @if (Model.PaymentDate.HasValue)
+                                        {
+                                            <br><small class="text-muted mt-1">(@Model.PaymentDate.Value.ToString("dd/MM/yyyy") tarihinde)</small>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning fs-6">
+                                            <i class="fas fa-clock me-1"></i>
+                                            Ödenmemiş
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hatırlatıcı -->
+                        @if (Model.ReminderDate.HasValue)
+                        {
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <label class="fw-bold text-muted small">HATIRLATICI TARİHİ</label>
+                                    <h6 class="text-dark mb-0 mt-1">@Model.ReminderDate.Value.ToString("dd/MM/yyyy")</h6>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="detail-item mt-3">
+                            <label class="fw-bold text-muted small">NOTLAR</label>
+                            <div class="bg-light p-3 rounded mt-2">
+                                <p class="mb-0 text-dark">@Model.Notes</p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Action Buttons -->
+                    <div class="text-center mt-5">
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            <input type="hidden" asp-for="Id" />
+                            <div class="d-flex gap-3 justify-content-center">
+                                <a asp-action="Index" class="btn btn-modern btn-secondary-modern">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Güvenli Dönüş
+                                </a>
+                                <button type="submit" class="btn btn-modern btn-danger-modern" 
+                                        onclick="return confirm('Bu faturayı kalıcı olarak silmek istediğinizden EMİN misiniz?\n\nBu işlem GERİ ALINAMAZ!')">
+                                    <i class="fas fa-trash-alt me-2"></i>
+                                    Evet, Kalıcı Olarak Sil
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="text-center mt-4">
+                    <div class="bg-white bg-opacity-75 rounded-3 p-3">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Faturayı silmek yerine arşivlemek isterseniz, düzenleme sayfasından notlar bölümüne "ARŞİV" yazabilirsiniz.
+                        </small>
+                    </div>
+                    </h6>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Silinen faturalar geri getirilemez
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Tüm fatura geçmişi kaybolacaktır
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-check text-success me-2"></i>
+                            İstatistikleriniz güncellenir
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

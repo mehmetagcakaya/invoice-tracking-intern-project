@@ -1,0 +1,63 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Gizlilik Politikası";
+}
+<h1 class="display-5 fw-bold mb-4 text-center">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Toplanan Bilgiler -->
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-body">
+                <h2 class="h5 card-title mb-3"><i class="fas fa-database me-2 text-primary"></i>Toplanan Bilgiler</h2>
+                <p class="card-text">
+                    Web sitemizi kullandığınızda bazı kişisel bilgiler (örneğin e-posta adresi, kullanıcı adı, IP adresi) toplanabilir.
+                    Bu bilgiler sizinle iletişime geçmek, hizmetlerimizi geliştirmek ve hesabınızı korumak amacıyla kullanılır.
+                </p>
+            </div>
+        </div>
+
+        <!-- Bilgilerin Paylaşılması -->
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-body">
+                <h2 class="h5 card-title mb-3"><i class="fas fa-share-alt me-2 text-primary"></i>Bilgilerin Paylaşılması</h2>
+                <p class="card-text">
+                    Kişisel bilgileriniz, yasal zorunluluklar haricinde üçüncü kişilerle paylaşılmaz.
+                    Hiçbir şekilde satılmaz ya da kiralanmaz. <em>(Datayı para yerine geçirmiyoruz, chill.)</em>
+                </p>
+            </div>
+        </div>
+
+        <!-- Güvenlik -->
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-body">
+                <h2 class="h5 card-title mb-3"><i class="fas fa-shield-alt me-2 text-primary"></i>Güvenlik</h2>
+                <p class="card-text">
+                    Bilgilerinizin güvenliği için elimizden gelen tüm teknik ve idari önlemleri alıyoruz. Yine de internet üzerinden iletilen
+                    verilerin %100 güvenli olacağı garanti edilemez. <em>(Kimse Matrix’e bağlı değil sonuçta.)</em>
+                </p>
+            </div>
+        </div>
+
+        <!-- Değişiklikler -->
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-body">
+                <h2 class="h5 card-title mb-3"><i class="fas fa-sync-alt me-2 text-primary"></i>Değişiklikler</h2>
+                <p class="card-text">
+                    Bu gizlilik politikası zaman zaman güncellenebilir. Değişiklikler sitede yayınlanır ve hemen yürürlüğe girer. Takipte kal!
+                </p>
+            </div>
+        </div>
+
+        <!-- İletişim -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h2 class="h5 card-title mb-3"><i class="fas fa-envelope me-2 text-primary"></i>İletişim</h2>
+                <p class="card-text">
+                    Sorularınız varsa bize <a href="mailto:mehmet.ack17@gmail.com">mehmet.ack17@gmail.com</a> adresinden ulaşabilirsiniz.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

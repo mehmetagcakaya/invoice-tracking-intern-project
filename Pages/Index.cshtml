@@ -1,0 +1,212 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Fatura Yönetim Dashboard";
+}
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="container-fluid">
+        <!-- Hero Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="bg-gradient-primary text-white rounded-3 p-4 shadow">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="display-5 fw-bold mb-2">Hoş Geldin, @Model.UserDisplayName!</h1>
+                            <p class="lead mb-0">"Mali disiplin, başarının anahtarıdır. Her fatura, hedeflerinize giden yolda bir adımdır."</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <i class="fas fa-receipt fa-5x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="fw-bold text-dark">Hızlı İşlemler</h3>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <a href="/Bills/Create" class="btn btn-primary btn-lg w-100 shadow-sm">
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Yeni Fatura Ekle
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/Bills" class="btn btn-outline-primary btn-lg w-100 shadow-sm">
+                            <i class="fas fa-list me-2"></i>
+                            Tüm Faturalar
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/Bills?filter=unpaid" class="btn btn-outline-warning btn-lg w-100 shadow-sm">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Ödenmemiş Faturalar
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/Bills?filter=paid" class="btn btn-outline-success btn-lg w-100 shadow-sm">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Ödenen Faturalar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Motivational Quotes Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h4 class="card-title fw-bold text-primary mb-3">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            Günün Motivasyonu
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-light rounded p-3 h-100">
+                                    <blockquote class="blockquote mb-0">
+                                        <p class="mb-3">"Bütçe, paranızın nereye gittiğini söylemek değil, nereye gitmesini istediğinizi söylemektir."</p>
+                                        <footer class="blockquote-footer mt-1 ms-1">Dave Ramsey</footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-light rounded p-3 h-100">
+                                    <blockquote class="blockquote mb-0">
+                                        <p class="mb-3">"Zenginlik, ne kadar kazandığınız değil, ne kadar biriktirdiğinizdir."</p>
+                                        <footer class="blockquote-footer mt-1 ms-1">Robert Kiyosaki</footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-light rounded p-3 h-100">
+                                    <blockquote class="blockquote mb-0">
+                                        <p class="mb-3">"Mali özgürlük, para hakkında endişelenmemek değil, paranızı kontrol etmektir."</p>
+                                        <footer class="blockquote-footer mt-1 ms-1">Tony Robbins</footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started Guide -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h4 class="card-title fw-bold text-success mb-3">
+                            <i class="fas fa-rocket me-2"></i>
+                            Başlangıç Rehberi
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-start mb-3">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <span class="fw-bold">1</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Faturalarınızı Ekleyin</h6>
+                                        <p class="text-muted mb-0">Tüm faturalarınızı sisteme ekleyerek takip etmeye başlayın.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-start mb-3">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <span class="fw-bold">2</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Kategorilere Ayırın</h6>
+                                        <p class="text-muted mb-0">Faturalarınızı kategorilere ayırarak daha iyi organize edin.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-start mb-3">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <span class="fw-bold">3</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Ödeme Durumunu Takip Edin</h6>
+                                        <p class="text-muted mb-0">Faturalarınızı ödedikçe işaretleyerek kontrolü elinizde tutun.</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-start mb-3">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <span class="fw-bold">4</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Notlar Ekleyin</h6>
+                                        <p class="text-muted mb-0">Faturalarınıza özel notlar ekleyerek detayları unutmayın.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="bg-gradient-primary text-white rounded-3 p-5 shadow mb-5">
+                    <i class="fas fa-receipt fa-4x mb-4 opacity-75"></i>
+                    <h1 class="display-4 fw-bold mb-3">Fatura Yönetim Sistemi</h1>
+                    <p class="lead mb-4">Faturalarınızı kolayca takip edin, organize edin ve mali disiplininizi güçlendirin.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="/Identity/Account/Register" class="btn btn-light btn-lg px-4 me-md-2">
+                            <i class="fas fa-user-plus me-2"></i>
+                            Kayıt Ol
+                        </a>
+                        <a href="/Identity/Account/Login" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Giriş Yap
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-plus-circle fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title fw-bold">Kolay Ekleme</h5>
+                                <p class="card-text text-muted">Faturalarınızı hızlı ve kolay bir şekilde sisteme ekleyin.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-chart-pie fa-3x text-success mb-3"></i>
+                                <h5 class="card-title fw-bold">Detaylı Takip</h5>
+                                <p class="card-text text-muted">Ödenen ve ödenmemiş faturalarınızı ayrı ayrı görüntüleyin.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-bell fa-3x text-warning mb-3"></i>
+                                <h5 class="card-title fw-bold">Hatırlatıcılar</h5>
+                                <p class="card-text text-muted">Fatura son ödeme tarihlerini asla kaçırmayın.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

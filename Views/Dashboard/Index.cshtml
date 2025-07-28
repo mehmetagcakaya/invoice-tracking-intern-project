@@ -1,0 +1,111 @@
+@{
+    ViewData["Title"] = "Kontrol Paneli";
+    var monthLabels = ViewBag.MonthLabels as List<string> ?? new List<string>();
+    var monthValues = ViewBag.MonthValues as List<decimal> ?? new List<decimal>();
+    var categoryLabels = ViewBag.CategoryLabels as List<string> ?? new List<string>();
+    var categoryValues = ViewBag.CategoryValues as List<decimal> ?? new List<decimal>();
+}
+<div class="container py-4">
+    <h2 class="text-center mb-4">Kontrol Paneli</h2>
+    <form class="row g-2 align-items-end mb-3" method="get">
+        <div class="col-auto">
+            <label for="yearSelect" class="form-label mb-0">Yıl</label>
+            <select id="yearSelect" class="form-select" name="year">
+                <option value="">Tümü</option>
+                @foreach (var y in (ViewBag.Years as List<int> ?? new List<int>()))
+                {
+                    if (ViewContext.HttpContext.Request.Query["year"].ToString() == y.ToString())
+                    {
+                        <option value="@y" selected>@y</option>
+                    }
+                    else
+                    {
+                        <option value="@y">@y</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <label for="monthSelect" class="form-label mb-0">Ay</label>
+            <select id="monthSelect" class="form-select" name="month">
+                <option value="">Tümü</option>
+                @for (int m = 1; m <= 12; m++)
+                {
+                    var abbrev = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(m);
+                    if (ViewContext.HttpContext.Request.Query["month"].ToString() == m.ToString())
+                    {
+                        <option value="@m" selected>@abbrev</option>
+                    }
+                    else
+                    {
+                        <option value="@m">@abbrev</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary">Uygula</button>
+        </div>
+    </form>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">Aylık Giderler (@ViewBag.SelectedYear)</div>
+                <div class="card-body">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">Kategori Bazlı Dağılım</div>
+                <div class="card-body">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        const monthCtx = document.getElementById('monthlyChart').getContext('2d');
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+
+        const monthChart = new Chart(monthCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(monthLabels)),
+                datasets: [{
+                    label: 'Tutar (₺)',
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(monthValues)),
+                    backgroundColor: '#0d6efd'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const catLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(categoryLabels));
+        const catValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(categoryValues));
+
+        const categoryChart = new Chart(categoryCtx, {
+            type: 'pie',
+            data: {
+                labels: catLabels,
+                datasets: [{
+                    data: catValues,
+                    backgroundColor: catLabels.map((_, i) => `hsl(${i * 45},70%,50%)`)
+                }]
+            },
+            options: { responsive: true }
+        });
+    </script>
+}

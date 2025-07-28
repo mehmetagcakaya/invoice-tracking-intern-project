@@ -1,0 +1,381 @@
+@model BillManagerApp.Models.Bill
+@using Microsoft.AspNetCore.Identity
+@using BillManagerApp.Models
+@inject UserManager<ApplicationUser> _userManager
+@{
+    ViewData["Title"] = "Yeni Fatura Ekle";
+}
+
+@section Styles {
+    <style>
+        .modern-form-container {
+            background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%);
+            /* Removed full viewport height to allow adaptive container */
+            padding: 2rem 0;
+        }
+        .form-card-border {
+            background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%);
+            border-radius: 28px;
+        }
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .form-control-modern {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+        }
+        .form-control-modern:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: white;
+        }
+        .btn-modern {
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .btn-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .btn-primary-modern {
+            background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%);
+            color: white;
+        }
+        .btn-secondary-modern {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #495057;
+        }
+        .form-label-modern {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+        .icon-input {
+            position: relative;
+        }
+        .icon-input i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            z-index: 10;
+        }
+        .icon-input .form-control-modern {
+            padding-left: 3rem;
+        }
+        .tips-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .floating-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+            .header-border {
+            background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%);
+            border-radius: 28px;
+        }
+            /* unified gradient wrapper and white card */
+        .gradient-wrapper {
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%);
+            border-radius: 28px;
+        }
+        .white-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+}
+
+<div class="modern-form-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Floating Header with gradient border -->
+                <div class="gradient-wrapper p-3">
+                    <div class="floating-header text-center">
+                        <h1 class="display-6 fw-bold text-dark mb-2">
+                            <i class="fas fa-plus-circle me-3" style="color: #667eea;"></i>
+                            Yeni Fatura Ekle
+                        </h1>
+                        <p class="lead text-muted mb-0">Faturanızı ekleyerek mali takibinizi güçlendirin</p>
+                    </div> <!-- end floating-header -->
+                </div> <!-- end header-border -->
+
+                <!-- Gradient Border Wrapper -->
+                <div class="gradient-wrapper p-4">
+                    <!-- Main Form Card -->
+                    <div class="white-card form-card p-5">
+                        <form asp-action="Create" method="post">
+                            @Html.AntiForgeryToken()
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3" role="alert"></div>
+                            
+                            <!-- Hidden field for Id (0 for new) -->
+                            <input type="hidden" asp-for="Id" value="0" />
+
+                            <div class="row g-4">
+                            
+                            
+                                <!-- Fatura Adı -->
+                                <div class="col-sm-6 col-md-6">
+                                    <label asp-for="Name" class="form-label-modern">
+                                        <i class="fas fa-file-invoice me-2" style="color: #667eea;"></i>
+                                        Fatura Adı
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-edit"></i>
+                                        <input asp-for="Name" class="form-control-modern" placeholder="Örn: Elektrik Faturası" required />
+                                    </div>
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+
+
+                            <!-- Kategori -->
+                            <div class="col-sm-6 col-md-6">
+                                <label asp-for="Category" class="form-label-modern">
+                                    <i class="fas fa-tags me-2" style="color: #667eea;"></i>
+                                    Kategori
+                                </label>
+                                <div class="icon-input">
+                                    <i class="fas fa-list"></i>
+                                    <select asp-for="Category" class="form-control-modern" required>
+                                        <option value="">Kategori Seçin</option>
+                                        <option value="Elektrik">⚡ Elektrik</option>
+                                        <option value="Su">💧 Su</option>
+                                        <option value="Doğalgaz">🔥 Doğalgaz</option>
+                                        <option value="İnternet">🌐 İnternet</option>
+                                        <option value="Telefon">📱 Telefon</option>
+                                        <option value="Kira">🏠 Kira</option>
+                                        <option value="Kredi Kartı">💳 Kredi Kartı</option>
+                                        <option value="Sigorta">🛡️ Sigorta</option>
+                                        <option value="Eğitim">📚 Eğitim</option>
+                                        <option value="Sağlık">🏥 Sağlık</option>
+                                        <option value="Ulaşım">🚗 Ulaşım</option>
+                                        <option value="Diğer">📋 Diğer</option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="Category" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mt-2">
+                            <!-- Tutar -->
+                            <div class="col-sm-6 col-md-6">
+                                <label asp-for="Amount" class="form-label-modern">
+                                    <i class="fas fa-lira-sign me-2" style="color: #667eea;"></i>
+                                    Tutar (₺)
+                                </label>
+                                <div class="icon-input">
+                                    <i class="fas fa-money-bill"></i>
+                                    <input asp-for="Amount" type="number" step="0.01" min="0" class="form-control-modern" placeholder="0.00" />
+                                </div>
+                                <span asp-validation-for="Amount" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Son Ödeme Tarihi -->
+                            <div class="col-sm-6 col-md-6">
+                                <label asp-for="DueDate" class="form-label-modern">
+                                    <i class="fas fa-calendar-alt me-2" style="color: #667eea;"></i>
+                                    Son Ödeme Tarihi
+                                </label>
+                                <div class="icon-input">
+                                    <i class="fas fa-calendar"></i>
+                                    <input asp-for="DueDate" type="date" class="form-control-modern" />
+                                </div>
+                                <span asp-validation-for="DueDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Tekrar Ayarları -->
+                        <div class="row g-4 mt-2">
+                            <!-- Tekrar Tipi -->
+                            <div class="col-sm-6 col-md-6">
+                                <label asp-for="RecurrenceType" class="form-label-modern">
+                                    <i class="fas fa-redo-alt me-2" style="color:#20c997;"></i>
+                                    Tekrar Tipi
+                                </label>
+                                <div class="icon-input">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <select asp-for="RecurrenceType" class="form-control-modern">
+                                        <option value="0">Yok</option>
+                                        <option value="1">Aylık</option>
+                                        <option value="2">Yıllık</option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="RecurrenceType" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Bitiş Tarihi -->
+                            <div class="col-sm-6 col-md-6">
+                                <label asp-for="RecurrenceEnd" class="form-label-modern">
+                                    <i class="fas fa-calendar-check me-2" style="color:#20c997;"></i>
+                                    Tekrar Bitiş Tarihi
+                                </label>
+                                <div class="icon-input">
+                                    <i class="fas fa-calendar"></i>
+                                    <input asp-for="RecurrenceEnd" type="date" class="form-control-modern" />
+                                </div>
+                                <div class="form-text mt-2">
+                                    <i class="fas fa-info-circle me-1 text-info"></i>
+                                    Boş bırakılırsa sınırsız tekrar eder
+                                </div>
+                                <span asp-validation-for="RecurrenceEnd" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Hatırlatıcı Tarihi -->
+                        <div class="mt-4">
+                            <label asp-for="ReminderDate" class="form-label-modern">
+                                <i class="fas fa-bell me-2" style="color: #ffc107;"></i>
+                                Hatırlatıcı Tarihi (İsteğe Bağlı)
+                            </label>
+                            <div class="icon-input">
+                                <i class="fas fa-clock"></i>
+                                <input asp-for="ReminderDate" type="date" class="form-control-modern" />
+                            </div>
+                            <div class="form-text mt-2">
+                                <i class="fas fa-info-circle me-1 text-info"></i>
+                                Bu tarihte size hatırlatma yapılacaktır
+                            </div>
+                            <span asp-validation-for="ReminderDate" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Notlar -->
+                        <div class="mt-4">
+                            <label asp-for="Notes" class="form-label-modern">
+                                <i class="fas fa-sticky-note me-2" style="color: #17a2b8;"></i>
+                                Notlar (İsteğe Bağlı)
+                            </label>
+                            <textarea asp-for="Notes" class="form-control-modern" rows="4" placeholder="Bu fatura hakkında özel notlarınızı buraya yazabilirsiniz..."></textarea>
+                            <div class="form-text mt-2">
+                                <i class="fas fa-info-circle me-1 text-info"></i>
+                                Maksimum 500 karakter
+                            </div>
+                            <span asp-validation-for="Notes" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-3 justify-content-center mt-5">
+                            <a asp-action="Index" class="btn btn-modern btn-secondary-modern">
+                                <i class="fas fa-times me-2"></i>
+                                İptal Et
+                            </a>
+                            <button type="submit" class="btn btn-modern btn-primary-modern">
+                                <i class="fas fa-save me-2"></i>
+                                Faturayı Kaydet
+                            </button>
+                            <button type="submit" name="goto" value="list" class="btn btn-modern btn-primary-modern">
+                                <i class="fas fa-save me-2"></i>
+                                Kaydet ve Listeye Git
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="tips-card p-4 mt-4">
+                    <h6 class="fw-bold text-success mb-3">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        💡 Faydalı İpuçları
+                    </h6>
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-md-6">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span class="small">Fatura adını açık ve anlaşılır yazın</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span class="small">Doğru kategoriyi seçmeyi unutmayın</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span class="small">Hatırlatıcıyı son ödeme tarihinden önce ayarlayın</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span class="small">Önemli detayları notlar bölümüne ekleyin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Modern form interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-set reminder date 3 days before due date
+            const dueDateInput = document.querySelector('input[name="DueDate"]');
+            const reminderDateInput = document.querySelector('input[name="ReminderDate"]');
+            
+            if (dueDateInput && reminderDateInput) {
+                dueDateInput.addEventListener('change', function() {
+                    const dueDate = new Date(this.value);
+                    if (dueDate) {
+                        const reminderDate = new Date(dueDate);
+                        reminderDate.setDate(reminderDate.getDate() - 3);
+                        reminderDateInput.value = reminderDate.toISOString().split('T')[0];
+                    }
+                });
+            }
+            
+            // Form validation feedback
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const inputs = form.querySelectorAll('.form-control-modern');
+                    inputs.forEach(input => {
+                        if (!input.checkValidity()) {
+                            input.style.borderColor = '#dc3545';
+                        } else {
+                            input.style.borderColor = '#28a745';
+                        }
+                    });
+                });
+            }
+            
+            // Input focus effects
+            const inputs = document.querySelectorAll('.form-control-modern');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+}

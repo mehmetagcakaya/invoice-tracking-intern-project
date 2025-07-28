@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Fatura Yönetim Sistemi</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BillManagerApp.styles.css" asp-append-version="true" />
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        .btn {
+            border-radius: 8px;
+        }
+        .shadow-sm {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+        }
+            /* Full-page light pastel gradient background */
+        [data-bs-theme="light"] body {
+            background: linear-gradient(135deg, #f7f9fc 0%, #e0eafc 100%);
+            min-height: 100vh;
+            color: #212529;
+        }
+        [data-bs-theme="dark"] body {
+            background-color: #121212;
+            min-height: 100vh;
+            color: #f8f9fa;
+        }
+        /* Ensure cards, navbars, and form elements blend with dark theme */
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+        }
+        .navbar {
+            background-color: #ffffff !important;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .form-control {
+            background-color: #ffffff;
+            color: #212529;
+            border-color: #ced4da;
+        }
+        .form-control:focus {
+            background-color: #eef2ff;
+            color: #212529;
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+        }
+        /* Dark theme overrides */
+        [data-bs-theme="dark"] .navbar {
+            background-color: #212529 !important;
+            border-bottom: 1px solid #343a40;
+        }
+        [data-bs-theme="dark"] .card {
+            background-color: #1e1e1e;
+            border: 1px solid #343a40;
+            color: #f8f9fa;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.5);
+        }
+        [data-bs-theme="dark"] .form-control {
+            background-color: #1e1e1e;
+            color: #f8f9fa;
+            border-color: #495057;
+        }
+        [data-bs-theme="dark"] .form-control:focus {
+            background-color: #2c2c2c;
+            color: #f8f9fa;
+            border-color: #66afe9;
+            box-shadow: 0 0 0 0.2rem rgba(102,175,233,.25);
+        }
+        /* Utility overrides */
+        [data-bs-theme="dark"] .text-dark {
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .bg-white,
+        [data-bs-theme="dark"] .table,
+        [data-bs-theme="dark"] .bg-light {
+            background-color: #1e1e1e !important;
+        }
+        [data-bs-theme="dark"] .table thead {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+        [data-bs-theme="dark"] .table tbody tr {
+            border-color: #343a40;
+        }
+        [data-bs-theme="dark"] .btn-outline-secondary {
+            color: #f8f9fa;
+            border-color: #6c757d;
+        }
+        [data-bs-theme="dark"] .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: #1e1e1e;
+        }
+        /* Navbar links & brand */
+        [data-bs-theme="dark"] .navbar-brand,
+        [data-bs-theme="dark"] .navbar .nav-link {
+            color: #f8f9fa !important;
+        }
+        /* Headings & paragraph defaults */
+        [data-bs-theme="dark"] h1,
+        [data-bs-theme="dark"] h2,
+        [data-bs-theme="dark"] h3,
+        [data-bs-theme="dark"] h4,
+        [data-bs-theme="dark"] h5,
+        [data-bs-theme="dark"] h6,
+        [data-bs-theme="dark"] p,
+        [data-bs-theme="dark"] label,
+        [data-bs-theme="dark"] span {
+            color: #f8f9fa;
+        }
+        /* Table body text */
+        [data-bs-theme="dark"] .table td {
+            color: #f8f9fa;
+        }
+        /* Muted text */
+        [data-bs-theme="dark"] .text-muted {
+            color: #adb5bd !important;
+        }
+        /* Card / section headers */
+        [data-bs-theme="dark"] .card-header,
+        [data-bs-theme="dark"] .list-group-item,
+        [data-bs-theme="dark"] .accordion-button,
+        [data-bs-theme="dark"] .accordion-header {
+            background-color: #1e1e1e;
+            color: #f8f9fa;
+        }
+        /* Table section headers (thead / tr class) */
+        [data-bs-theme="dark"] .table th,
+        [data-bs-theme="dark"] .table .thead,
+        [data-bs-theme="dark"] .table .table-secondary {
+            background-color: #343a40 !important;
+            color: #f8f9fa !important;
+        }
+        /* Badges & labels with dark text */
+        [data-bs-theme="dark"] .badge,
+        [data-bs-theme="dark"] .label,
+        [data-bs-theme="dark"] .fw-bold {
+            color: #f8f9fa !important;
+        }
+        /* Table warning rows (vadesi geçen) */
+        [data-bs-theme="dark"] .table-warning,
+        [data-bs-theme="dark"] .table-warning * {
+            color: #212529 !important;
+        }
+        [data-bs-theme="dark"] .table-warning > th,
+        [data-bs-theme="dark"] .table-warning > td,
+        [data-bs-theme="dark"] .bg-warning,
+        [data-bs-theme="dark"] .bg-warning-subtle {
+            background-color: #fff3cd !important;
+            color: #212529 !important;
+        }
+        /* Override Bootstrap utility bg-* that lighten */
+        [data-bs-theme="dark"] .bg-warning,
+        [data-bs-theme="dark"] .bg-warning-subtle {
+            background-color: #664d03 !important;
+            color: #fff !important;
+        }
+        /* Ensure links inside dark backgrounds are legible */
+        [data-bs-theme="dark"] a {
+            color: #0d6efd;
+        }
+        /* Additional text color utilities */
+        [data-bs-theme="dark"] .text-secondary {
+            color: #ced4da !important;
+        }
+        [data-bs-theme="dark"] .text-body,
+        [data-bs-theme="dark"] .text-body-secondary {
+            color: #f8f9fa !important;
+        }
+        /* Table secondary rows */
+        [data-bs-theme="dark"] .table-secondary th,
+        [data-bs-theme="dark"] .table-secondary td {
+            background-color: #2b2b2b !important;
+            color: #f8f9fa !important;
+        }
+        /* Bootstrap CSS variable overrides for dark */
+        :root[data-bs-theme="dark"] {
+            --bs-body-color: #f8f9fa;
+            --bs-body-bg: #121212;
+            --bs-heading-color: #f8f9fa;
+            --bs-link-color: #0d6efd;
+            --bs-link-hover-color: #0a58ca;
+            --bs-border-color: #343a40;
+            --bs-table-bg: #1e1e1e;
+            --bs-table-color: #f8f9fa;
+        }
+        /* Light/secondary table backgrounds */
+        [data-bs-theme="dark"] .table-light,
+        [data-bs-theme="dark"] .bg-light {
+            background-color: #2b2b2b !important;
+            color: #f8f9fa !important;
+        }
+        /* Success/primary etc keep readable text */
+        [data-bs-theme="dark"] .bg-success,
+        [data-bs-theme="dark"] .bg-primary,
+        [data-bs-theme="dark"] .bg-danger,
+        [data-bs-theme="dark"] .bg-info,
+        [data-bs-theme="dark"] .bg-secondary {
+            color: #f8f9fa !important;
+        }
+        /* Primary buttons */
+        [data-bs-theme="dark"] .btn-primary {
+            color: #fff !important;
+        }
+        /* Placeholder text (+ custom controls) */
+        [data-bs-theme="dark"] ::placeholder,
+        [data-bs-theme="dark"] .form-control-modern::placeholder {
+            color: #adb5bd !important;
+            opacity: 1;
+        }
+        /* Form labels and helper texts */
+        [data-bs-theme="dark"] .form-label,
+        [data-bs-theme="dark"] .form-check-label,
+        [data-bs-theme="dark"] .form-text,
+        [data-bs-theme="dark"] .input-group-text,
+        [data-bs-theme="dark"] .btn-link,
+        [data-bs-theme="dark"] .fw-semibold {
+            color: #f8f9fa !important;
+        }
+        /* Additional catch-all for bold/strong text */
+        [data-bs-theme="dark"] strong,
+        [data-bs-theme="dark"] b {
+            color: #f8f9fa !important;
+        }
+
+        /* Custom Create page cards */
+        [data-bs-theme="dark"] .white-card {
+            background: rgba(30,30,30,0.95) !important;
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .floating-header {
+            background: rgba(30,30,30,0.9) !important;
+        }
+        [data-bs-theme="dark"] .form-label-modern,
+        [data-bs-theme="dark"] .tips-card {
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .tips-card {
+            background: #1e1e1e !important;
+        }
+        /* Accordion body */
+        [data-bs-theme="dark"] .accordion-body {
+            background-color: #1e1e1e !important;
+            color: #f8f9fa !important;
+        }
+        /* Gradient utility boxes/buttons */
+        [data-bs-theme="dark"] .bg-gradient-primary,
+        [data-bs-theme="dark"] .bg-gradient,
+        [data-bs-theme="dark"] .gradient {
+            color: #fff !important;
+        }
+        /* Table filter label wrappers */
+        [data-bs-theme="dark"] .filter-label,
+        [data-bs-theme="dark"] .filter-title {
+            color: #f8f9fa !important;
+        }
+        /* Override any element with explicit black */
+        [data-bs-theme="dark"] *[style*="color: #000"],
+        [data-bs-theme="dark"] *[style*="color:#000"],
+        [data-bs-theme="dark"] *[style*="color:black"] {
+            color: #f8f9fa !important;
+        }
+    </style>
+    @RenderSection("Styles", required: false)
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Fatura Yönetim Sistemi</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">
+                                <i class="fas fa-home me-1"></i>
+                                Ana Sayfa
+                            </a>
+                        </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Bills">
+                                    <i class="fas fa-receipt me-1"></i>
+                                    Faturalarım
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Bills/Create">
+                                    <i class="fas fa-plus me-1"></i>
+                                    Yeni Fatura
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Dashboard">
+                                    <i class="fas fa-chart-pie me-1"></i>
+                                    Kontrol Paneli
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                        <button id="themeToggle" class="btn btn-outline-secondary ms-2" type="button">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3 flex-grow-1">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-auto">
+        <div class="container">
+            &copy; 2025 - BillManagerApp - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        (() => {
+            const themeToggleBtn = document.getElementById('themeToggle');
+            if (!themeToggleBtn) return;
+            const htmlEl = document.documentElement;
+            const storedTheme = localStorage.getItem('theme') || 'light';
+            htmlEl.dataset.bsTheme = storedTheme;
+            updateIcon(storedTheme);
+
+            themeToggleBtn.addEventListener('click', () => {
+                const current = htmlEl.dataset.bsTheme === 'dark' ? 'dark' : 'light';
+                const newTheme = current === 'dark' ? 'light' : 'dark';
+                htmlEl.dataset.bsTheme = newTheme;
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+
+            function updateIcon(theme) {
+                const icon = themeToggleBtn.querySelector('i');
+                if (!icon) return;
+                if (theme === 'dark') {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿@page
+@model BillManagerApp.Areas.Identity.Pages.Account.Manage.IndexModel
+@{
+    ViewData["Title"] = "Hesabımı Yönet";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Profil Bilgilerim</h2>
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-success">@Model.StatusMessage</div>
+}
+
+<form method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label fw-bold">E-posta</label>
+        <input type="email" class="form-control" value="@Model.Email" readonly />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.FirstName" class="form-label"></label>
+        <input name="Input.FirstName" value="@Model.Input.FirstName" class="form-control" placeholder="Ad" />
+        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.LastName" class="form-label"></label>
+        <input name="Input.LastName" value="@Model.Input.LastName" class="form-control" placeholder="Soyad" />
+        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Kaydet</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
