@@ -20,7 +20,7 @@ git clone https://github.com/mehmetagcakaya/invoice-tracking-intern-project.git
 cd invoice-tracking-intern-project
 
 # Bağımlılıkları indirin ve veritabanını oluşturun
-# (Varsayılan olarak **SQL Server (LocalDB)** kullanır)
+# (Varsayılan olarak **MSSQL (LocalDB)** kullanır)
 
 # Migration varsa uygula
  dotnet ef database update
@@ -43,7 +43,7 @@ cd invoice-tracking-intern-project
 - .NET 8.0
 - ASP.NET Core Razor Pages
 - Entity Framework Core (Code-First)
-- **SQL Server (varsayılan)** veya SQLite / PostgreSQL
+- **MSSQL (varsayılan)** veya SQLite / PostgreSQL
 - QuestPDF
 
 ## Lisans
